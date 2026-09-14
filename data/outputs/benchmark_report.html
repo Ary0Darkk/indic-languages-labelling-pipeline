@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indic OCR & HTR Benchmark Report</title>
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --border: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --success: #4ade80;
+            --warning: #facc15;
+            --danger: #f87171;
+            --diff-del: #7f1d1d;
+            --diff-ins: #14532d;
+            --diff-sub: #713f12;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            padding: 2rem;
+            line-height: 1.5;
+        }
+        .header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        h1 { font-size: 1.8rem; color: var(--accent); }
+        .badge {
+            background: #1e1b4b;
+            color: #818cf8;
+            padding: 0.3rem 0.8rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 2.5rem;
+        }
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .card-title { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .card-value { font-size: 1.8rem; font-weight: 700; }
+        .score-good { color: var(--success); }
+        .score-medium { color: var(--warning); }
+        .score-bad { color: var(--danger); }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            background: var(--bg-card);
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { background: #1e293b; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; }
+        tr:hover { background: #33415540; }
+
+        .details-section { margin-top: 3rem; }
+        .page-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        .page-header {
+            padding: 1rem 1.25rem;
+            background: #1e293b;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .page-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            padding: 1.25rem;
+        }
+        .text-box {
+            background: #0f172a;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-size: 0.95rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: "Noto Sans", "Nirmala UI", sans-serif;
+            max-height: 350px;
+            overflow-y: auto;
+        }
+        .diff-del { background-color: var(--diff-del); text-decoration: line-through; padding: 0 2px; border-radius: 2px; }
+        .diff-ins { background-color: var(--diff-ins); padding: 0 2px; border-radius: 2px; }
+        .diff-sub { background-color: var(--diff-sub); padding: 0 2px; border-radius: 2px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>Indic OCR & Handwriting Benchmark Report</h1>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Language: <strong>Kannada (kn)</strong> | Total Pages Evaluated: <strong>3</strong></p>
+        </div>
+        <div class="badge">Indic Pipeline Benchmark</div>
+    </div>
+
+    <div class="summary-grid">
+        
+        <div class="card">
+            <div class="card-title">mock_gemini_sim</div>
+            <div class="card-value score-bad">
+                CER: 69.99%
+            </div>
+            <div style="font-size: 0.95rem; color: var(--text-muted); margin-top: 0.4rem;">
+                WER: <strong>82.22%</strong> | Latency: <strong>0.40s</strong>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-title">mock_baseline_sim</div>
+            <div class="card-value score-bad">
+                CER: 73.84%
+            </div>
+            <div style="font-size: 0.95rem; color: var(--text-muted); margin-top: 0.4rem;">
+                WER: <strong>95.56%</strong> | Latency: <strong>0.40s</strong>
+            </div>
+        </div>
+        
+    </div>
+
+    <h2 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--text-main);">Engine Comparison Summary</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Engine</th>
+                <th>Mean CER (%)</th>
+                <th>Mean WER (%)</th>
+                <th>Char Accuracy (%)</th>
+                <th>Word Accuracy (%)</th>
+                <th>Avg Latency (s)</th>
+                <th>Total Errors (S / D / I)</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            <tr>
+                <td><strong>mock_gemini_sim</strong></td>
+                <td><span class="score-bad">69.99%</span></td>
+                <td>82.22%</td>
+                <td>30.01%</td>
+                <td>17.78%</td>
+                <td>0.40s</td>
+                <td>114 / 93 / 4</td>
+            </tr>
+            
+            <tr>
+                <td><strong>mock_baseline_sim</strong></td>
+                <td><span class="score-bad">73.84%</span></td>
+                <td>95.56%</td>
+                <td>26.16%</td>
+                <td>4.44%</td>
+                <td>0.40s</td>
+                <td>128 / 92 / 3</td>
+            </tr>
+            
+        </tbody>
+    </table>
+
+    <div class="details-section">
+        <h2 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--text-main);">Per-Page Visual & Diff Inspection</h2>
+        
+        <div class="page-card">
+            <div class="page-header">
+                <div>
+                    <strong>Page: hi_sample_01.png</strong>
+                    <span style="color: var(--text-muted); font-size: 0.85rem; margin-left: 0.75rem;">Ground Truth: 112 chars</span>
+                </div>
+                <div style="font-size: 0.85rem; color: var(--accent);">
+                    Engine: <strong>mock_gemini_sim</strong> | CER: <strong>85.71%</strong> | WER: <strong>100.00%</strong>
+                </div>
+            </div>
+            <div class="page-content">
+                <div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 600;">GROUND TRUTH (REFERENCE)</div>
+                    <div class="text-box">भारत सरकार - आधिकारिक प्रपत्र
+विषय: नागरिक सेवा प्रमाण पत्र
+नाम: राजेश शर्मा
+दिनांक: 26-01-2024
+स्थान: नई दिल्ली</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 600;">MODEL PREDICTION</div>
+                    <div class="text-box">ಅರ್ನಾಟಕ ರಾಜ್ಯ ಸರ್ಕಾರ ಅಧಿಕೃತ ದಾಖಲೆ
+ಹೆಸರು: ರಮೇಶ್ ಕುಮಾಅ್
+ದಿನಾಂಕ: 15-08-2024</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-card">
+            <div class="page-header">
+                <div>
+                    <strong>Page: hi_sample_01.png</strong>
+                    <span style="color: var(--text-muted); font-size: 0.85rem; margin-left: 0.75rem;">Ground Truth: 112 chars</span>
+                </div>
+                <div style="font-size: 0.85rem; color: var(--accent);">
+                    Engine: <strong>mock_baseline_sim</strong> | CER: <strong>87.50%</strong> | WER: <strong>100.00%</strong>
+                </div>
+            </div>
+            <div class="page-content">
+                <div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 600;">GROUND TRUTH (REFERENCE)</div>
+                    <div class="text-box">भारत सरकार - आधिकारिक प्रपत्र
+विषय: नागरिक सेवा प्रमाण पत्र
+नाम: राजेश शर्मा
+दिनांक: 26-01-2024
+स्थान: नई दिल्ली</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 600;">MODEL PREDICTION</div>
+                    <div class="text-box">ಇರ್ನಾಟಕ ರಾಜನಯ ಸರ್ಕಾರ ಅಧಿಕೃತ ರಾಕಲೆ
+ಹೆಸರಕ: ಅಮೇಶ್ ಕುನಾರ್
+ದಿನಾಂಕಅ 15-08-ಅ024</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-card">
+            <div class="page-header">
+                <div>
+                    <strong>Page: kn_sample_01.png</strong>
+                    <span style="color: var(--text-muted); font-size: 0.85rem; margin-left: 0.75rem;">Ground Truth: 108 chars</span>
+                </div>
+                <div style="font-size: 0.85rem; color: var(--accent);">
+                    Engine: <strong>mock_gemini_sim</strong> | CER: <strong>40.74%</strong> | WER: <strong>46.67%</strong>
+                </div>
+            </div>
+            <div class="page-content">
+                <div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 600;">GROUND TRUTH (REFERENCE)</div>
+                    <div class="text-box">ಕರ್ನಾಟಕ ರಾಜ್ಯ ಸರ್ಕಾರ
+ವಿಷಯ: ಸಾರ್ವಜನಿಕ ದಾಖಲಾತಿ ಪತ್ರ
+ಹೆಸರು: ರಮೇಶ್ ಕುಮಾರ್
+ದಿನಾಂಕ: 15-08-2024
+ವಿಳಾಸ: ಬೆಂಗಳೂರು ನಗರ</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 600;">MODEL PREDICTION</div>
+                    <div class="text-box">ಕರ್ನಾಟಕ ರಾಜ್ಯ ಸರ್ಕಾರ ಅಧಿಕೃತ ದಾಖಆೆ
+ಹೆಸರು: ರಮೇಶ್ ಕುಮಾರ್
+ದಿನಾಂಕ: 15-08-2024</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-card">
+            <div class="page-header">
+                <div>
+                    <strong>Page: kn_sample_01.png</strong>
+                    <span style="color: var(--text-muted); font-size: 0.85rem; margin-left: 0.75rem;">Ground Truth: 108 chars</span>
+                </div>
+                <div style="font-size: 0.85rem; color: var(--accent);">
+                    Engine: <strong>mock_baseline_sim</strong> | CER: <strong>48.15%</strong> | WER: <strong>86.67%</strong>
+                </div>
+            </div>
+            <div class="page-content">
+                <div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 600;">GROUND TRUTH (REFERENCE)</div>
+                    <div class="text-box">ಕರ್ನಾಟಕ ರಾಜ್ಯ ಸರ್ಕಾರ
+ವಿಷಯ: ಸಾರ್ವಜನಿಕ ದಾಖಲಾತಿ ಪತ್ರ
+ಹೆಸರು: ರಮೇಶ್ ಕುಮಾರ್
+ದಿನಾಂಕ: 15-08-2024
+ವಿಳಾಸ: ಬೆಂಗಳೂರು ನಗರ</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 600;">MODEL PREDICTION</div>
+                    <div class="text-box">ಕರ್ನಾನಕ ರಲಜ್ಯ ಸರ್ಕಾರ ಅಧಿಕೃತ ದಾಖರೆ
+ಕೆಸರು: ಗಮೇಶ್ ಕುಮಾರ್
+ದಿಕತಂಕ: 15-08ಕ20ನ4</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-card">
+            <div class="page-header">
+                <div>
+                    <strong>Page: kn_sample_02.png</strong>
+                    <span style="color: var(--text-muted); font-size: 0.85rem; margin-left: 0.75rem;">Ground Truth: 85 chars</span>
+                </div>
+                <div style="font-size: 0.85rem; color: var(--accent);">
+                    Engine: <strong>mock_gemini_sim</strong> | CER: <strong>83.53%</strong> | WER: <strong>100.00%</strong>
+                </div>
+            </div>
+            <div class="page-content">
+                <div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 600;">GROUND TRUTH (REFERENCE)</div>
+                    <div class="text-box">ಅರ್ಜಿ ನಮೂನೆ
+ಖಾತೆ ಸಂಖ್ಯೆ: ೯೮೭೬೫೪೩೨೧
+ಮೊತ್ತ: ರೂ. ೫೦,೦೦೦
+ಸ್ಥಳ: ಮೈಸೂರು
+ಷರಾ: ಪರಿಶೀಲಿಸಲಾಗಿದೆ</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 600;">MODEL PREDICTION</div>
+                    <div class="text-box">ಕರ್ನಾಟಕ ರಾಜ್ಯ ಸರ್ಕಾರ ಅಧಿಕೃತ ದಾಖಲೆ
+ಹೆಸರು: ರಮೇಶ್ ಕುಮಾರ್
+ದಿನಾಂಕ: 15-08-ಗ024</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-card">
+            <div class="page-header">
+                <div>
+                    <strong>Page: kn_sample_02.png</strong>
+                    <span style="color: var(--text-muted); font-size: 0.85rem; margin-left: 0.75rem;">Ground Truth: 85 chars</span>
+                </div>
+                <div style="font-size: 0.85rem; color: var(--accent);">
+                    Engine: <strong>mock_baseline_sim</strong> | CER: <strong>85.88%</strong> | WER: <strong>100.00%</strong>
+                </div>
+            </div>
+            <div class="page-content">
+                <div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 600;">GROUND TRUTH (REFERENCE)</div>
+                    <div class="text-box">ಅರ್ಜಿ ನಮೂನೆ
+ಖಾತೆ ಸಂಖ್ಯೆ: ೯೮೭೬೫೪೩೨೧
+ಮೊತ್ತ: ರೂ. ೫೦,೦೦೦
+ಸ್ಥಳ: ಮೈಸೂರು
+ಷರಾ: ಪರಿಶೀಲಿಸಲಾಗಿದೆ</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 600;">MODEL PREDICTION</div>
+                    <div class="text-box">ಕರ್ನಾಟಕ ರಾಅ್ಯ ಸರಗಕಾರ ಇಧಿಕೃಆ ದಾಖಲಲ
+ಹೆಸರು: ರಕೇಶ್ ಕಕಮಾಗರ
+ದಿನಾಂಕ: 15-08-2024</div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>

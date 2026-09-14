@@ -1,0 +1,30 @@
+# Default Configuration for Indic OCR & Transcription Pipeline
+
+preprocessing:
+  enabled: true
+  deskew: true
+  clahe_contrast: true
+  clahe_clip_limit: 2.0
+  clahe_grid_size: 8
+  denoise: true
+  adaptive_binarize: false
+  min_dpi: 300
+  target_dpi: 300
+
+engine:
+  gemini_model: "gemini-2.5-flash"
+  gemini_temperature: 0.0
+  sarvam_model: "sarvam-ocr"
+  timeout_seconds: 60
+  max_retries: 3
+  retry_delay: 2.0
+
+evaluation:
+  normalize_unicode: true
+  unicode_form: "NFC"
+  ignore_zwnj: true
+  ignore_zwj: true
+  ignore_case: false
+  strip_punctuation: false
+  normalize_whitespace: true
+  normalize_nukta: true

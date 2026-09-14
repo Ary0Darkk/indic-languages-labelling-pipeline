@@ -1,0 +1,36 @@
+[project]
+name = "indic-languages-labelling-pipeline"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pillow>=10.0.0",
+    "opencv-python-headless>=4.8.0",
+    "numpy>=1.24.0",
+    "google-genai>=0.1.0",
+    "requests>=2.31.0",
+    "httpx>=0.27.0",
+    "rapidfuzz>=3.6.0",
+    "tabulate>=0.9.0",
+    "pandas>=2.0.0",
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    "pyyaml>=6.0.1",
+    "rich>=13.7.0",
+    "rich-click>=1.7.0",
+    "tqdm>=4.66.0",
+    "jinja2>=3.1.0",
+    "pytest>=8.0.0",
+    "pypdfium2>=5.13.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/indic_pipeline"]
+
+[project.scripts]
+indic-ocr = "indic_pipeline.cli:cli"

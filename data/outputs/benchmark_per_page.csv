@@ -1,0 +1,7 @@
+image_name,engine_name,cer,wer,char_accuracy,word_accuracy,latency_seconds,substitutions,deletions,insertions,gt_chars,pred_chars
+hi_sample_01.png,mock_gemini_sim,0.8571,1.0,14.29,0.0,0.401,54,41,1,112,72
+hi_sample_01.png,mock_baseline_sim,0.875,1.0,12.5,0.0,0.401,56,41,1,112,72
+kn_sample_01.png,mock_gemini_sim,0.4074,0.4667,59.26,53.33,0.401,8,36,0,108,72
+kn_sample_01.png,mock_baseline_sim,0.4815,0.8667,51.85,13.33,0.401,16,36,0,108,72
+kn_sample_02.png,mock_gemini_sim,0.8353,1.0,16.47,0.0,0.401,52,16,3,85,72
+kn_sample_02.png,mock_baseline_sim,0.8588,1.0,14.12,0.0,0.401,56,15,2,85,72

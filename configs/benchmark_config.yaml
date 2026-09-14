@@ -1,0 +1,19 @@
+# Benchmark Configuration
+languages:
+  - kn
+  - hi
+  - bn
+  - ta
+  - te
+
+engines:
+  - gemini
+  - sarvam
+  - gcv
+  - surya
+  - tesseract
+
+dataset:
+  samples_dir: "./data/samples"
+  ground_truth_dir: "./data/ground_truth"
+  output_dir: "./data/outputs"

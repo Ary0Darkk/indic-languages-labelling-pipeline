@@ -1,0 +1,31 @@
+{
+  "summaries": {
+    "mock_gemini_sim": {
+      "mean_cer": 0.6999333333333334,
+      "median_cer": 0.8353,
+      "mean_wer": 0.8222333333333333,
+      "median_wer": 1.0,
+      "mean_char_acc": 30.006666666666664,
+      "mean_word_acc": 17.776666666666667,
+      "mean_latency": 0.401,
+      "total_subs": 114,
+      "total_dels": 93,
+      "total_ins": 4,
+      "total_pages": 3
+    },
+    "mock_baseline_sim": {
+      "mean_cer": 0.7384333333333334,
+      "median_cer": 0.8588,
+      "mean_wer": 0.9555666666666666,
+      "median_wer": 1.0,
+      "mean_char_acc": 26.156666666666666,
+      "mean_word_acc": 4.443333333333333,
+      "mean_latency": 0.401,
+      "total_subs": 128,
+      "total_dels": 92,
+      "total_ins": 3,
+      "total_pages": 3
+    }
+  },
+  "page_results_count": 6
+}
